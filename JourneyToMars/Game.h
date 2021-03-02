@@ -44,25 +44,24 @@ private:
     //Music
     sf::Music music;
 
-    //SFX - Basic Attack
+    //SFX
     sf::SoundBuffer sfxBoostBufferBasicAttack;
     sf::Sound sfxBoostBasicAttack;
-
     //SFX - Enemy Hit
     sf::SoundBuffer sfxBoostBufferEnemyHit;
     sf::Sound sfxBoostBasicAttackEnemyHit;
-
     //SFX - Player Damage Taken
     sf::SoundBuffer sfxBoostBufferPlayerHit;
     sf::Sound sfxBoostBasicAttackPlayerHit;
-
     //SFX - Cthulu Attacks
     sf::SoundBuffer sfxBoostBufferCthuluAttack;
     sf::Sound sfxBoostBasicCthuluAttack;
-
     //SFX - Cthulu Enters!
     sf::SoundBuffer sfxBoostBufferCthuluEnters;
     sf::Sound sfxBoostCthuluEnters;
+    //SFX - Cthulu Takes Damage!
+    sf::SoundBuffer sfxBoostBufferCthuluTakesDamage;
+    sf::Sound sfxBoostCthuluTakesDamage;
 
     //Player
     Entity * player;
@@ -106,12 +105,12 @@ public:
     void updatePollEvents();
     void updateInput();
     void updateGui();
-    void updateWorld();
     void updateCollision();
     void updateBullets();
     void updateEnemies();
     void updateCombat();
     void update();
+    void reset();
 
     void renderGui();
     void renderWorld();

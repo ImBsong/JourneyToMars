@@ -3,11 +3,12 @@
 void Cthulu::initVariables()
 {
     movementSpeed = 5.f;
+    upDownTimer = 0.f;
 
     hpMax = 100;
     hp = hpMax;
 
-    attackCooldownMax = 8.f;
+    attackCooldownMax = 5.f;
     attackCooldown = attackCooldownMax;
 
     pauseAttack = 0;
@@ -33,7 +34,7 @@ void Cthulu::initSprite()
 void Cthulu::updateAttack()
 {
     if (attackCooldown < attackCooldownMax)
-        attackCooldown += 2.f;
+        attackCooldown += .7f;
 }
 
 void Cthulu::update()
@@ -44,10 +45,12 @@ void Cthulu::update()
     if (getBounds().left + getBounds().width > 1920)
         goingLeft = true;
 
+
     if (goingLeft)
-        move(-1.f, 0.f);
+        move(-.8f, 0.f);
     else
-        move(1.f, 0.f);
+        move(.8f, 0.f);
+
 
     // Quick and dirty code to have cthulu fire in intervals.  Not my proudest. Needs refactor
     if (pauseAttack < 100)

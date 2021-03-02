@@ -35,7 +35,7 @@ void Game::initGui()
     gameOverText.setFont(font);
     gameOverText.setCharacterSize(100);
     gameOverText.setFillColor(sf::Color::Red);
-    gameOverText.setString("Game Over!");
+    gameOverText.setString("Game Over! Press R to Reset");
     gameOverText.setPosition(
         (window->getSize().x / 2.f) - gameOverText.getGlobalBounds().width / 2.f,
         window->getSize().y / 2.f - gameOverText.getGlobalBounds().height / 2.f);
@@ -44,7 +44,7 @@ void Game::initGui()
     gameWonText.setFont(font);
     gameWonText.setCharacterSize(100);
     gameWonText.setFillColor(sf::Color::Green);
-    gameWonText.setString("You Win!");
+    gameWonText.setString("You Win! Press R to Reset");
     gameWonText.setPosition(
         (window->getSize().x / 2.f) - gameWonText.getGlobalBounds().width / 2.f,
         window->getSize().y / 2.f - gameWonText.getGlobalBounds().height / 2.f);
@@ -102,7 +102,7 @@ void Game::initSounds()
     sfxBoostBasicAttackEnemyHit.setBuffer(sfxBoostBufferEnemyHit);
 
     // Player Hit
-    if (!sfxBoostBufferPlayerHit.loadFromFile("Sounds/SoundFX/explosionCrunch_000.ogg"))
+    if (!sfxBoostBufferPlayerHit.loadFromFile("Sounds/SoundFX/close_004.ogg"))
         std::cout << "ERROR: Player Hit FX Did not load!\n";
     sfxBoostBasicAttackPlayerHit.setBuffer(sfxBoostBufferPlayerHit);
 
@@ -115,6 +115,11 @@ void Game::initSounds()
     if (!sfxBoostBufferCthuluEnters.loadFromFile("Sounds/SoundFX/laugh-evil-1.ogg"))
         std::cout << "ERROR: Cthulu Enters FX Did not load!\n";
     sfxBoostCthuluEnters.setBuffer(sfxBoostBufferCthuluEnters);
+
+    // Cthulu Takes Damage
+    if (!sfxBoostBufferCthuluTakesDamage.loadFromFile("Sounds/SoundFX/explosionCrunch_000.ogg"))
+        std::cout << "ERROR: Cthulu Enters FX Did not load!\n";
+    sfxBoostCthuluTakesDamage.setBuffer(sfxBoostBufferCthuluTakesDamage);
 }
 
 void Game::initPlayer()
@@ -212,6 +217,8 @@ void Game::updatePollEvents()
         case sf::Event::KeyPressed:
             if (sfmlEvent.key.code == sf::Keyboard::Escape)
                 window->close();
+            if (sfmlEvent.key.code == sf::Keyboard::R)
+                reset();
             break;
         }
     }
@@ -260,10 +267,6 @@ void Game::updateGui()
     float CthuluHpPercent = static_cast<float>(cthulu->getHp()) / cthulu->getHpMax();
     CthuluHpBar.setSize(sf::Vector2f(300.f * CthuluHpPercent, CthuluHpBar.getSize().y));
 
-}
-
-void Game::updateWorld()
-{
 }
 
 void Game::updateCollision()
@@ -415,7 +418,7 @@ void Game::updateCombat()
         if (cthulu->getBounds().intersects(bullets[i]->getBounds()))
         {
             points += 10;
-            sfxBoostBasicAttackEnemyHit.play();
+            sfxBoostCthuluTakesDamage.play();
             cthulu->loseHp(3);
 
             delete bullets[i];
@@ -427,7 +430,6 @@ void Game::updateCombat()
 void Game::update()
 {
     updateInput();
-    updateWorld();
     player->update();
     cthulu->update();
     updateCollision();
@@ -435,6 +437,48 @@ void Game::update()
     updateEnemies();
     updateCombat();
     updateGui();
+}
+
+void Game::reset()
+{
+    // First, delet all the old stuff
+    delete this->player;
+    delete this->cthulu;
+    //for (auto i : this->textures)
+    //{
+    //    delete i.second;
+    //}
+
+    //Delete bullets
+    for (auto *i : this->bullets)
+    {
+        delete i;
+    }
+    bullets.clear();
+
+    for (auto *i : this->enemies)
+    {
+        delete i;
+    }
+    enemies.clear();
+
+    for (auto *i : this->lasers)
+    {
+        delete i;
+    }
+    lasers.clear();
+
+
+    // Re initialize
+    initTextures();
+    initGui();
+    initSystems();
+    initWorld();
+    initPlayer();
+    initEnemies();
+    initCthulu();
+
+
 }
 
 void Game::renderGui()

@@ -19,7 +19,5 @@ int main()
 
     game.run();
 
-    std::cin.get();
-
     return 0;
 }

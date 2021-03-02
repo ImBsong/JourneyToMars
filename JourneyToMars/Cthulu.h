@@ -10,6 +10,7 @@ class Cthulu : public Entity
 {
 private:
     bool goingLeft = true; // Currently only goes left and right
+    float upDownTimer;
     int pauseAttack;
     int spawnTimer;
     int spawnThreshold;

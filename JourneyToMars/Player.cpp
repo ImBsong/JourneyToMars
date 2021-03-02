@@ -8,7 +8,7 @@ void Player::initVariables()
     hpMax = 100;
     hp = hpMax;
 
-    attackCooldownMax = 10.f;
+    attackCooldownMax = 6.f;
     attackCooldown = attackCooldownMax;
 }
 
